@@ -1,4 +1,11 @@
 # stock-control-app
+
+### Libraries
+- Django
+- Django Rest Framework
+- Psycopg2
+- Python-Dotenv
+
 ## Instructions
 `virtualenv env`
 
@@ -8,47 +15,44 @@
 
 `python manage.py runserver`
 
-### Libraries
-- Django
-- Django Rest Framework
-- Psycopg2
-- Python-Dotenv
-
 ### Models:
-#### Category
-- id 
-- title
+| Category | Type |
+| ------------- | ------------- |
+| id | integer, auto-increment |
+| title | string |
 
-#### Item
-- id
-- category_id
-- visibility
-- title
-- photo
-- unit_price
-- quantity
-- datetime
-- last_update
 
-#### Transaction
-- price
-- items
-- datetime
+| Item | Type |
+| ------------- | ------------- |
+| id | integer, auto-increment |
+| category_id | foreign-key |
+| visibility | bool |
+| title | string |
+| photo | string |
+| unit_price | decimal 2f |
+| quantity | integer |
+| datetime | string |
+| last_update | string |
+
+
+| Transaction | Type |
+| ------------- | ------------- |
+| price | decimal 2f |
+| items | psycopg2 array |
+| datetime | string |
 
 
 ### Endpoints 
-/api/admin-panel/user/
-/api/admin-panel/user/<id>
- 
-/api/admin-panel/transaction/
-/api/admin-panel/transaction/<id>
 
-/api/admin-panel/
-/api/admin-panel/item/
-/api/admin-panel/item/<id>
-
-/api/point-of-sale/
-/api/point-of-sale/transaction/
-
-/api/frontend/
- 
+| Endpoints | Description |
+| ------------- | ------------- |
+| /frontend/ | Send SPA |
+| /api/admin-panel/ | Read |
+| /api/admin-panel/user/ | Create / Read |
+| /api/admin-panel/user/<id> | Read / Update / Delete |
+| /api/admin-panel/transaction/ | Read |
+| /api/admin-panel/transaction/<id> | Read / Update / Delete |
+| /api/admin-panel/item/ | Create / Read |
+| /api/admin-panel/item/<id> | Read / Update / Delete |
+| /api/point-of-sale/ | Read |
+| /api/point-of-sale/transaction/ | Create |
