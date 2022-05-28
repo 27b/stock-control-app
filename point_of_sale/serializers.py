@@ -2,7 +2,7 @@ from .models import Item, Transaction
 from rest_framework import serializers
 
 
-class ItemSerialzier(serializers.HyperlinkedModelSerializer):
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Item
         fields = [
@@ -15,6 +15,7 @@ class ItemSerialzier(serializers.HyperlinkedModelSerializer):
             "datetime",
             "last_modified"
         ]
+
 
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
