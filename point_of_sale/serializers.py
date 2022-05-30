@@ -1,5 +1,14 @@
-from .models import Item, Transaction
+from .models import Category, Item, Transaction
 from rest_framework import serializers
+
+
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Category
+        fields = [
+            "id",
+            "title"
+        ]
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -7,6 +16,7 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         model = Item
         fields = [
             "id",
+            "category_id",
             "title",
             "visibility",
             "image",
