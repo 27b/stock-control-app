@@ -152,3 +152,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = join(BASE_DIR, 'uploads')
+
+
+AUTH_USER_MODEL = 'point_of_sale.CustomUser'

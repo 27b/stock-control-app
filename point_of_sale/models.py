@@ -1,5 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
+
+
+class CustomUser(AbstractUser):
+    ROLES = [
+        ("PS", "Point of Sale"),
+        ("IM", "Inventory Management"),
+        ("AD", "Administration"),
+    ]
+
+    role = models.CharField(max_length=2, choices=ROLES, null=True, blank=True)
 
 
 class Category(models.Model):
