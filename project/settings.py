@@ -59,7 +59,6 @@ INSTALLED_APPS = [
 
     'common.apps.CommonConfig',
     'admin_panel.apps.AdminPanelConfig',
-    'frontend.apps.FrontendConfig',
     'point_of_sale.apps.PointOfSaleConfig'
 ]
 
