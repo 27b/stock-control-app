@@ -43,7 +43,7 @@ REST_FRAMEWORK = {
     #    'rest_framework.renderers.JSONRenderer',
     #],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
 
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
+    'common.apps.CommonConfig',
     'admin_panel.apps.AdminPanelConfig',
     'frontend.apps.FrontendConfig',
     'point_of_sale.apps.PointOfSaleConfig'
@@ -154,4 +155,4 @@ MEDIA_URL = '/uploads/'
 MEDIA_ROOT = join(BASE_DIR, 'uploads')
 
 
-AUTH_USER_MODEL = 'point_of_sale.CustomUser'
+AUTH_USER_MODEL = 'common.CustomUser'

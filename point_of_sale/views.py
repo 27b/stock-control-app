@@ -4,15 +4,15 @@ from rest_framework import viewsets, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 
-from .models import Category, Item, Transaction
+from common.models import Category, Item, Transaction
+
 from .permissions import PointOfSalePermission
 from .serializers import CategorySerializer, ItemSerializer, TransactionSerializer
 
 
 class IndexView(View):
 
-    @staticmethod
-    def get():
+    def get(self, request):
         return HttpResponse("Hello, World!")
 
 
@@ -40,12 +40,14 @@ class TransactionView(viewsets.ModelViewSet):
     http_method_names = ["post"]
 
     def create(self, request):
-        transaction = self.serializer_class(data=request.data)
-        if transaction.is_valid():
+        transaction_data = self.serializer_class(data=request.data)
+        if transaction_data.is_valid():
+            transaction = Transaction(**transaction_data.validated_data)
             transaction_integrity = transaction.check_transaction_integrity()
             if transaction_integrity == []:
-                Transaction.objects.create_user(**transaction.validated_data)
-                return Response(transaction, status=status.HTTP_201_CREATED)
+                transaction.save()
+                response = transaction_data
+                return Response(response, status=status.HTTP_201_CREATED)
             return Response({
                 'errors': transaction_integrity,
                 'data': transaction.validated_data
@@ -54,4 +56,3 @@ class TransactionView(viewsets.ModelViewSet):
             'status': 'Bad Request',
             'message': 'Account could not be created with received data'
         }, status=status.HTTP_400_BAD_REQUEST)
-
