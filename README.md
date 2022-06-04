@@ -1,10 +1,14 @@
 # stock-control-app
 
-### Libraries
-- Django
-- Django Rest Framework
-- Psycopg2
-- Python-Dotenv
+### Python requirements
+- django
+- djangorestframework
+- psycopg2
+- python-dotenv
+
+### Frontend requirements
+- react 18.1.0
+- react-router-dom 6.3.0
 
 ## Instructions
 `virtualenv env`
