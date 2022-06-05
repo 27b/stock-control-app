@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'common.apps.CommonConfig',
-    'admin_panel.apps.AdminPanelConfig',
     'point_of_sale.apps.PointOfSaleConfig'
 ]
 
