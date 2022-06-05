@@ -41,7 +41,7 @@ class TransactionView(viewsets.ModelViewSet):
     ]
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    http_method_names = ["get", "post", "put", "delete"]
+    http_method_names = ["get", "post"]
 
     def create(self, request):
         transaction_data = self.serializer_class(data=request.data)
