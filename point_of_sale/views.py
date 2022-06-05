@@ -1,43 +1,47 @@
-from django.views.generic import View
-from django.http import HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 
-from common.models import Category, Item, Transaction
-
-from .permissions import PointOfSalePermission
-from .serializers import CategorySerializer, ItemSerializer, TransactionSerializer
-
-
-class IndexView(View):
-
-    def get(self, request):
-        return HttpResponse("Hello, World!")
+from common.models import *
+from common.serializers import *
+from common.permissions import *
 
 
 class CategoryView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
-    permission_classes = [PointOfSalePermission]
+    permission_classes = [
+        PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission |
+        InventoryPostPermission | AdminPostPermission |
+        InventoryPutPermission | AdminPutPermission |
+        AdminDeletePermission
+    ]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    http_method_names = ["get"]
+    http_method_names = ["get", "post", "put", "delete"]
 
 
 class ItemView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
-    permission_classes = [PointOfSalePermission]
-    queryset = Item.objects.filter(visibility=True).all()
+    permission_classes = [
+        PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission |
+        InventoryPostPermission | AdminPostPermission |
+        InventoryPutPermission | AdminPutPermission |
+        AdminDeletePermission
+    ]
+    queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    http_method_names = ["get"]
+    http_method_names = ["get", "post", "put", "delete"]
 
 
 class TransactionView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
-    permission_classes = [PointOfSalePermission]
+    permission_classes = [
+        AdminGetPermission |
+        PointOfSalePostPermission | AdminPostPermission
+    ]
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    http_method_names = ["post"]
+    http_method_names = ["get", "post", "put", "delete"]
 
     def create(self, request):
         transaction_data = self.serializer_class(data=request.data)
