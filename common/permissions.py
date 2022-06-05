@@ -50,7 +50,7 @@ class InventoryGetPermission(BasePermission):
     Check if the user have the rol of Inventory and the method is GET.
     """
     def has_permission(self, request, view) -> bool:
-        if bool(request.user) and request.user.role == "PS" and \
+        if bool(request.user) and request.user.role == "IM" and \
             request.method == "GET":
             return True
         return False
@@ -61,7 +61,7 @@ class InventoryPostPermission(BasePermission):
     Check if the user have the rol of Inventory and the method is POST.
     """
     def has_permission(self, request, view) -> bool:
-        if bool(request.user) and request.user.role == "PS" and \
+        if bool(request.user) and request.user.role == "IM" and \
             request.method == "POST":
             return True
         return False
@@ -72,7 +72,7 @@ class InventoryPutPermission(BasePermission):
     Check if the user have the rol of Inventory and the method is PUT.
     """
     def has_permission(self, request, view) -> bool:
-        if bool(request.user) and request.user.role == "PS" and \
+        if bool(request.user) and request.user.role == "IM" and \
             request.method == "PUT":
             return True
         return False
@@ -83,7 +83,7 @@ class InventoryDeletePermission(BasePermission):
     Check if the user have the rol of Inventory and the method is DELETE.
     """
     def has_permission(self, request, view) -> bool:
-        if bool(request.user) and request.user.role == "PS" and \
+        if bool(request.user) and request.user.role == "IM" and \
             request.method == "DELETE":
             return True
         return False
