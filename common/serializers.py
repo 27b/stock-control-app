@@ -1,4 +1,4 @@
-from common.models import Category, Item, Transaction
+from .models import Category, Item, Transaction
 from rest_framework import serializers
 
 
