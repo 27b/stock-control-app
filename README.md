@@ -41,6 +41,7 @@
 
 | Transaction | Type |
 | ------------- | ------------- |
+| id | integer, auto-increment |
 | price | decimal 2f |
 | items | psycopg2 array |
 | datetime | string |

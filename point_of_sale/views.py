@@ -11,8 +11,8 @@ class CategoryView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [
         PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission |
-        InventoryPostPermission | AdminPostPermission |
-        InventoryPutPermission | AdminPutPermission |
+        InventoryPostPermission  | AdminPostPermission    |
+        InventoryPutPermission   | AdminPutPermission     |
         AdminDeletePermission
     ]
     queryset = Category.objects.all()
@@ -24,8 +24,8 @@ class ItemView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [
         PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission |
-        InventoryPostPermission | AdminPostPermission |
-        InventoryPutPermission | AdminPutPermission |
+        InventoryPostPermission  | AdminPostPermission    |
+        InventoryPutPermission   | AdminPutPermission     |
         AdminDeletePermission
     ]
     queryset = Item.objects.all()
@@ -36,7 +36,7 @@ class ItemView(viewsets.ModelViewSet):
 class TransactionView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [
-        AdminGetPermission |
+        AdminGetPermission        |
         PointOfSalePostPermission | AdminPostPermission
     ]
     queryset = Transaction.objects.all()
