@@ -1,9 +1,25 @@
-from .models import Category, Item, Transaction
+from .models import CustomUser, Category, Item, Transaction
 from rest_framework import serializers
 
 
+class UserSerializer(serializers.ModelSerializer):
+    """User Serializer, returns a dict or a list of dicts.
+    
+    Returns:
+        dict: with id, role
+    """
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "role",
+            "username",
+            "email"
+        ]
+
+
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    """Category Serializer, returns a dict or a list of dicts:
+    """Category Serializer, returns a dict or a list of dicts.
     
     Returns:
         dict: with id, title
@@ -17,7 +33,7 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
-    """Item Serializer, returns a dict or a list of dicts:
+    """Item Serializer, returns a dict or a list of dicts.
     
     Returns:
         dict: with id, category_id, title, visibility, image,
@@ -39,7 +55,7 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
-    """Transaction Serializer, returns a dict or a list of dicts:
+    """Transaction Serializer, returns a dict or a list of dicts.
     
     Returns:
         dict: with id, price, items, datetime
