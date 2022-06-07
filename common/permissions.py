@@ -1,6 +1,27 @@
 from rest_framework.permissions import BasePermission
 
 
+class IsUserOrReadOnlyPermission(BasePermission):
+    """
+    Check if the user is owner and allow methods, else only GET.
+    """
+    def has_object_permission(self, request, view, obj) -> bool:
+        if request.method == "GET":
+            return True
+        return request.user == obj
+
+
+class IsUserPermission(BasePermission):
+    """
+    Check if the profile is of the user.
+    """
+    def has_permission(self, request, view) -> bool:      
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj
+
+
 class PointOfSaleGetPermission(BasePermission):
     """
     Check if the user have the rol of Point of Sale and the method is GET.
