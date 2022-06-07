@@ -1,10 +1,39 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import viewsets, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 
 from common.models import *
 from common.serializers import *
 from common.permissions import *
+
+
+class UserDetailView(RetrieveAPIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsUserPermission]
+    http_method_names = ["get"]
+
+    def get(self, request, pk=None):
+        queryset = CustomUser.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        self.check_object_permissions(request, user)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
+class UserListView(ListCreateAPIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [AdminGetPermission]
+    serializer_class = UserSerializer
+    http_method_names = ["get"]
+    queryset = CustomUser.objects.all()
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CategoryView(viewsets.ModelViewSet):
@@ -23,7 +52,7 @@ class CategoryView(viewsets.ModelViewSet):
 class ItemView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [
-        PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission |
+        PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission|
         InventoryPostPermission  | AdminPostPermission    |
         InventoryPutPermission   | AdminPutPermission     |
         AdminDeletePermission
