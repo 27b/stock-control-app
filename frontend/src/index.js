@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './Assets/app.css';
+import './assets/app.css';
 import reportWebVitals from './reportWebVitals';
-
+import App from './App/App';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <h1>Inventory Management</h1>
+    <App/>
   </React.StrictMode>
 );
 
