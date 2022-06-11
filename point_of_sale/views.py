@@ -4,10 +4,38 @@ from rest_framework import viewsets, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 
 from common.models import *
 from common.serializers import *
 from common.permissions import *
+
+
+class LoginView(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        login_serializer = self.serializer_class(
+            data = request.data,
+            context = {'request': request}
+        )
+        if login_serializer.is_valid():
+            user = login_serializer.validated_data['user']
+            user_serialized = UserSerializer(user).data
+            if user.is_active:
+                token, created = Token.objects.get_or_create(user=user)
+                if created:
+                    token.delete()
+                return Response({
+                    'token': token.key,
+                    'user': user_serialized
+                }, status=status.HTTP_201_CREATED)
+            return Response({
+                'error': 'User don\'t start session.'
+            }, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({
+            'error': 'Wrong username or password.'
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserDetailView(RetrieveAPIView):
@@ -22,7 +50,7 @@ class UserDetailView(RetrieveAPIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-
+ 
 class UserListView(ListCreateAPIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [AdminGetPermission]
