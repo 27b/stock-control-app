@@ -47,19 +47,26 @@ REST_FRAMEWORK = {
     ]
 }
 
-INSTALLED_APPS = [
+BASE_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
-    'rest_framework',
-
+LOCAL_APPS = [
     'common.apps.CommonConfig',
     'point_of_sale.apps.PointOfSaleConfig'
 ]
+
+THIRD_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+]
+
+INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
