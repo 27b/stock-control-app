@@ -1,9 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
+//import { saveUser } from '../../services/Auth/AuthAPI';
+import { loginUser } from '../../services/Auth/LoginAPI';
 
 const Login = () => {
+    const initialState = {username: "", password: ""};
+    const [state, setState] = useState(initialState);
+    const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
+    const handleSubmit = async event => {
+        event.preventDefault();
+        try {
+            let response = await loginUser(state);
+            let result = await response.json();
+            //if (result.token) saveUser(result.token);
+            console.log(result)
+            setState(initialState);
+        }
+        catch (error) {
+            console.log('Login error: ' + error);
+        }
+    }
+
     return (
-        <h1>Login Page</h1>
+        <main className="page-center">
+            <article className="sign-up">
+                <h1 className="sign-up__title">Inventory Management</h1>
+                <p className="sign-up__subtitle">Sign in to your account to continue</p>
+                <form onSubmit={handleSubmit} className="sign-up-form form">
+                    <label className="form-label-wrapper">
+                        <p className="form-label">Username</p>
+                        <input className="form-input" name="username" placeholder="Enter your email" required="" onChange={handleInputChange} />
+                    </label>
+                    <label className="form-label-wrapper">
+                        <p className="form-label">Password</p>
+                        <input className="form-input" name="password" type="password" placeholder="Enter your password" required="" onChange={handleInputChange} />
+                    </label>
+                    <br/>
+                    <button className="form-btn primary-default-btn transparent-btn">Sign in</button>
+                </form>
+            </article>
+        </main>
     )
 }
+
+//<a className="link-info forget-link" href="##">Forgot your password?</a>
+//<label className="form-checkbox-wrapper">
+//    <input className="form-checkbox" type="checkbox" required="" onChange={handleInputChange} />
+//    <span className="form-checkbox-label">Remember me next time</span>
+//</label>
 
 export default Login;
