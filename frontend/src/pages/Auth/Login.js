@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
-//import { saveUser } from '../../services/Auth/AuthAPI';
-import { loginUser } from '../../services/Auth/LoginAPI';
+import { loginUser } from '../../services/Auth/AuthAPI';
+import { checkUserCredentials } from '../../services/Auth/LoginAPI';
 
 const Login = () => {
-    const initialState = {username: "", password: ""};
+    const initialState = {username: '', password: ''};
     const [state, setState] = useState(initialState);
     const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
     const handleSubmit = async event => {
         event.preventDefault();
         try {
-            let response = await loginUser(state);
+            let response = await checkUserCredentials(state);
             let result = await response.json();
-            //if (result.token) saveUser(result.token);
-            console.log(result)
-            setState(initialState);
+            if (result.token) loginUser(result.token);
         }
         catch (error) {
             console.log('Login error: ' + error);
         }
+        setState(initialState);
     }
 
     return (
@@ -28,11 +27,26 @@ const Login = () => {
                 <form onSubmit={handleSubmit} className="sign-up-form form">
                     <label className="form-label-wrapper">
                         <p className="form-label">Username</p>
-                        <input className="form-input" name="username" placeholder="Enter your email" required="" onChange={handleInputChange} />
+                        <input
+                            className="form-input"
+                            name="username"
+                            placeholder="Enter your username"
+                            required=""
+                            value={state.username || ''}
+                            onChange={handleInputChange}
+                        />
                     </label>
                     <label className="form-label-wrapper">
                         <p className="form-label">Password</p>
-                        <input className="form-input" name="password" type="password" placeholder="Enter your password" required="" onChange={handleInputChange} />
+                        <input
+                            className="form-input"
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            required=""
+                            value={state.password || ''}
+                            onChange={handleInputChange}
+                        />
                     </label>
                     <br/>
                     <button className="form-btn primary-default-btn transparent-btn">Sign in</button>
