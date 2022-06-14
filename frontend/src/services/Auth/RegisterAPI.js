@@ -1,1 +1,0 @@
-const REGISTER_API = 'localhost:8000/api/point-of-sale/register/';

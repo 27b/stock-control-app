@@ -1,14 +1,8 @@
-const LOGIN_API = 'http://127.0.0.1:8000/api/point-of-sale/login/';
+import { sendRequest } from "./AuthAPI";
 
-export const loginUser = async credentials => {
-    return await fetch (LOGIN_API, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            'username': String(credentials.username),
-            'password': String(credentials.password),
-        })
-    })
-}
+const LOGIN_URL = 'http://127.0.0.1:8000/api/point-of-sale/login/';
+
+export const checkUserCredentials = async credentials => sendRequest('POST', LOGIN_URL, {
+    'username': String(credentials.username),
+    'password': String(credentials.password),
+});
