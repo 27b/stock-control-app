@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, status
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -39,7 +39,7 @@ class LoginView(ObtainAuthToken):
 
 
 class UserDetailView(RetrieveAPIView):
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsUserPermission]
     http_method_names = ["get"]
 
@@ -52,7 +52,7 @@ class UserDetailView(RetrieveAPIView):
 
  
 class UserListView(ListCreateAPIView):
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [AdminGetPermission]
     serializer_class = UserSerializer
     http_method_names = ["get"]
@@ -65,7 +65,7 @@ class UserListView(ListCreateAPIView):
 
 
 class CategoryView(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [
         PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission |
         InventoryPostPermission  | AdminPostPermission    |
@@ -78,7 +78,7 @@ class CategoryView(viewsets.ModelViewSet):
 
 
 class ItemView(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [
         PointOfSaleGetPermission | InventoryGetPermission | AdminGetPermission|
         InventoryPostPermission  | AdminPostPermission    |
@@ -91,7 +91,7 @@ class ItemView(viewsets.ModelViewSet):
 
 
 class TransactionView(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [
         AdminGetPermission        |
         PointOfSalePostPermission | AdminPostPermission
