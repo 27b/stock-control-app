@@ -7,7 +7,7 @@ const Login = lazy(() => import("../pages/Auth/Login"));
 export default function AuthRoutes() {
     return (
       <Routes>
-         <Route path={PATH.LOGIN} element={<Login />} />
+         <Route exact="true" path={PATH.LOGIN} element={<Login />} />
       </Routes>
     )
   }

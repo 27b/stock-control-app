@@ -11,7 +11,7 @@ const Login = () => {
         try {
             let response = await checkUserCredentials(state);
             let result = await response.json();
-            if (result.token) loginUser(result.token);
+            if (result.token) loginUser(result);
         }
         catch (error) {
             console.log('Login error: ' + error);
