@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { loginUser } from '../../services/Auth/AuthAPI';
 import { checkUserCredentials } from '../../services/Auth/LoginAPI';
 
+import './styles.css';
+
 const Login = () => {
     const initialState = {username: '', password: ''};
     const [state, setState] = useState(initialState);
@@ -20,46 +22,38 @@ const Login = () => {
     }
 
     return (
-        <main className="page-center">
-            <article className="sign-up">
-                <h1 className="sign-up__title">Inventory Management</h1>
-                <p className="sign-up__subtitle">Sign in to your account to continue</p>
-                <form onSubmit={handleSubmit} className="sign-up-form form">
-                    <label className="form-label-wrapper">
-                        <p className="form-label">Username</p>
+        <div class="div-center text-center">
+            <main class="form-signin w-100 m-auto align-center">
+                <form onSubmit={handleSubmit}>
+                    <h1 class="h3 mb-3 fw-normal">Sign in</h1>
+                    <h3 class="h6 mb-3 fw-normal">Sign in to continue</h3>
+
+                    <div class="form-floating">
                         <input
-                            className="form-input"
-                            name="username"
-                            placeholder="Enter your username"
-                            required=""
-                            value={state.username || ''}
-                            onChange={handleInputChange}
+                            type="username" class="form-control" id="floatingInput" placeholder="name@example.com"
+                            name="username" value={state.username} onChange={handleInputChange}
                         />
-                    </label>
-                    <label className="form-label-wrapper">
-                        <p className="form-label">Password</p>
+                        <label for="floatingInput">Email address</label>
+                    </div>
+                    <div class="form-floating">
                         <input
-                            className="form-input"
-                            name="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            required=""
-                            value={state.password || ''}
-                            onChange={handleInputChange}
+                            type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                            name="password" value={state.password} onChange={handleInputChange}
                         />
-                    </label>
-                    <br/>
-                    <button className="form-btn primary-default-btn transparent-btn">Sign in</button>
+                        <label for="floatingPassword">Password</label>
+                    </div>
+
+                    <div class="checkbox mb-3">
+                        <label> <input type="checkbox" value="remember-me" /> Remember me </label>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                    <p class="mt-5 mb-3 text-muted">
+                        <a href="#">Forgot password?</a>
+                    </p>
                 </form>
-            </article>
-        </main>
+            </main>
+        </div>
     )
 }
-
-//<a className="link-info forget-link" href="##">Forgot your password?</a>
-//<label className="form-checkbox-wrapper">
-//    <input className="form-checkbox" type="checkbox" required="" onChange={handleInputChange} />
-//    <span className="form-checkbox-label">Remember me next time</span>
-//</label>
 
 export default Login;
