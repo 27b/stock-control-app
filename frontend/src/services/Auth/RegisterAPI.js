@@ -1,0 +1,1 @@
+const REGISTER_URL = 'localhost:8000/api/point-of-sale/register/';

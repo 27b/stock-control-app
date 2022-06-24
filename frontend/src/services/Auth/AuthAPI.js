@@ -9,7 +9,7 @@ export const loginUser = ({token, user}) => {
 
 export const logoutUser = () => localStorage.clear();
 
-export const checkToken = () => localStorage.getItem('token') && localStorage.getItem('token').length === 40;
+export const checkToken = () => localStorage.getItem('token') && (localStorage.getItem('token').length === 40);
 
 export const checkUser = () => localStorage.getItem('username') && localStorage.getItem('role') && localStorage.getItem('id');
 
