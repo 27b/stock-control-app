@@ -1,14 +1,15 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-
 import AuthRoutes from "./AuthRoutes";
-import DashboardRoutes from "./DashboardRoutes";
+import UserRoutes from "./UserRoutes";
+import AdminRoutes from "./AdminRoutes";
 
 export default function Routes() {
   return (
     <BrowserRouter>
-      <DashboardRoutes />
       <AuthRoutes />
+      <UserRoutes />
+      <AdminRoutes />
     </BrowserRouter>
   )
 }
