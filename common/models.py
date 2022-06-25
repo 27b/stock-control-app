@@ -27,7 +27,7 @@ class Category(models.Model):
 
 
 class Item(models.Model):
-    category_id = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category_id = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     visibility = models.BooleanField(default=False)
     title = models.CharField(max_length=64)
     image = models.ImageField(upload_to='images/item/', null=True, blank=True)
