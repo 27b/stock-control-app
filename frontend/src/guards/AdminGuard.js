@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { authAdminUser } from "../services/Auth/AuthAPI";
+import { authAdminUser } from "../services/AuthAPI";
 import { PATH } from "../constants/paths";
 
 const AdminGuard = () => {

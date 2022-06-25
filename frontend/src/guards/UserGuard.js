@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { authUser } from "../services/Auth/AuthAPI";
+import { authUser } from "../services/AuthAPI";
 import { PATH } from "../constants/paths";
 
 const UserGuard = () => {
