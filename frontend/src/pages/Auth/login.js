@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { loginUser } from '../../services/Auth/AuthAPI';
-import { checkUserCredentials } from '../../services/Auth/LoginAPI';
+import { loginUser } from '../../services/AuthAPI';
+import { checkUserCredentials } from '../../services/LoginAPI';
 
-import './styles.css';
+import './css/styles.css';
 
 const Login = () => {
     const initialState = {username: '', password: ''};
