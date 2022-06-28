@@ -38,12 +38,18 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
     Returns:
         dict: with id, category_id, title, visibility, image,
         unit_price, quantity, datetime, last_modified 
-    """
+    """ 
+    category = serializers.PrimaryKeyRelatedField(
+        many=False,
+        read_only=False,
+        queryset=Category.objects.all()
+    )
+
     class Meta:
         model = Item
         fields = [
             "id",
-            "category_id",
+            "category",
             "title",
             "visibility",
             "image",
