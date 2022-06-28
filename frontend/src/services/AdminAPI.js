@@ -3,7 +3,7 @@ import { SERVER_URL } from '../constants/urls';
 
 const DASHBOARD_URL = SERVER_URL + 'api/point-of-sale/dashboard/';
 const CATEGORY_URL = SERVER_URL + 'api/point-of-sale/category/';
-const ITEM_URL = SERVER_URL + 'api/point-of-sale/user/';
+const ITEM_URL = SERVER_URL + 'api/point-of-sale/item/';
 const TRANSACTION_URL = SERVER_URL + 'api/point-of-sale/transaction/';
 
 export const DashboardHandler = new HTTPHandler(DASHBOARD_URL, sendAuthRequest);
