@@ -48,7 +48,7 @@ const CategoryList = ({categories}) => {
     }
 }
 
-const AdminCategories = () => {
+const CategoryListView = () => {
     const [state, setState] = useState(STATE);
  
     const get_categories = async () => {
@@ -89,7 +89,7 @@ const AdminCategories = () => {
     )
 }
 
-export const AdminCategoryItem = () => {
+export const CategoryDetailView = () => {
     const [state, setState] = useState({id: '', title: ''});
     const { id } = useParams();
 
@@ -140,4 +140,4 @@ export const AdminCategoryItem = () => {
 
 
 
-export default AdminCategories;
+export default CategoryListView;

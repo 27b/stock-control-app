@@ -1,9 +1,9 @@
-import _AdminDashboard from './dashboard';
-import _AdminCategories, { AdminCategoryItem as _AdminCategoryItem } from './categories';
-import _AdminItems, { AdminItemDetail as _AdminItemDetail } from './items';
+import _DashboardView from './dashboard';
+import _CategoryListView, { CategoryDetailView as _CategoryDetailView } from './categories';
+import _ItemListView, { ItemDetailView as _ItemDetailView } from './items';
 
-export const AdminDashboard = _AdminDashboard;
-export const AdminCategories = _AdminCategories;
-export const AdminCategoryItem = _AdminCategoryItem;
-export const AdminItems = _AdminItems;
-export const AdminItemDetail = _AdminItemDetail;
+export const DashboardView = _DashboardView;
+export const CategoryListView = _CategoryListView;
+export const CategoryDetailView = _CategoryDetailView;
+export const ItemListView = _ItemListView;
+export const ItemDetailView = _ItemDetailView;

@@ -52,7 +52,7 @@ const ItemList = ({items}) => {
     }
 }
 
-const AdminItems = () => {
+const ItemListView = () => {
     const [state, setState] = useState(STATE);
  
     const get_items = async () => {
@@ -98,7 +98,7 @@ const AdminItems = () => {
     )
 }
 
-export const AdminItemDetail = () => {
+export const ItemDetailView = () => {
     const [state, setState] = useState({});
     const { id } = useParams();
 
@@ -180,4 +180,4 @@ export const AdminItemDetail = () => {
     )
 }
 
-export default AdminItems;
+export default ItemListView;

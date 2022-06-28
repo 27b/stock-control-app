@@ -1,7 +1,7 @@
 import Layout from './_layout';
 import { Container, Row, Col } from "react-bootstrap";
 
-const AdminDashboard = () => {
+const DashboardView = () => {
     return (
         <Layout content={
             <>
@@ -68,4 +68,4 @@ const AdminDashboard = () => {
     )
 }
 
-export default AdminDashboard;
+export default DashboardView;
