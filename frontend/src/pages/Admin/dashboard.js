@@ -1,3 +1,4 @@
+import React from 'react';
 import Layout from './_layout';
 import { Row, Col } from "react-bootstrap";
 
