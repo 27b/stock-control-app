@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import { CategoryHandler } from '../../services/AdminAPI';   
+import React, { useState, useEffect } from 'react';
+import { CategoryHandler } from '../../services/AdminAPI';
 import Layout from './_layout';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { AdminPanelHeader } from '../../components/Header';
 
 const STATE = {categories: []};
+
+const CategoryHeader = () => <AdminPanelHeader title="Categories" link="/admin/category/add" button="Add Category" />;
 
 const CategoryItem = ({id, title}) => {
     const navigate = useNavigate();
@@ -16,17 +19,17 @@ const CategoryItem = ({id, title}) => {
         navigate('./' + id);
     }
 
-    const Delete = useCallback( async () => {
+    const Delete = async () => {
         await CategoryHandler.delete(id);
-    }, []);
+    }
 
     useEffect(() => {
         if (remove) {
             for (const category in STATE.categories)
-                if (category.id == id)
+                if (category.id === id)
                     STATE.categories.push(category);
         }
-    }, []);
+    });
 
     return (
         <tr>
@@ -70,8 +73,8 @@ const CategoryListView = () => {
     return (
         <Layout content={
             <>
-                <h1>Categories</h1>
-                <Table striped bordered hover className="mt-5">
+                <CategoryHeader />
+                <Table striped bordered hover>
                     <thead>
                         <tr>
                         <th>#</th>
@@ -104,16 +107,16 @@ export const CategoryDetailView = () => {
         }
     }
 
-    useEffect(() => { getCategoryData() }, [])
+    useEffect(() => { getCategoryData() })
 
     const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
     
     const handleSubmit = async event => {
         event.preventDefault();
         try {
-            console.log(state);
             let response = await CategoryHandler.put(id, state);
             let result = await response.json();
+            console.log(result);
         }
         catch (error) {
             console.log('CategoryItem Submit error: ' + error);
@@ -123,7 +126,7 @@ export const CategoryDetailView = () => {
     return (
         <Layout content={
             <>
-                <h1>Categories</h1>
+                <CategoryHeader />
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Control

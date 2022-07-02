@@ -1,5 +1,5 @@
 import Layout from './_layout';
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 const DashboardView = () => {
     return (

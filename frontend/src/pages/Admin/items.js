@@ -1,33 +1,34 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useReducer } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import { ItemHandler } from '../../services/AdminAPI';   
+import { ItemHandler2 } from '../../services/AdminAPI';   
 import Layout from './_layout';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { AdminPanelHeader } from '../../components/Header'
 
 const STATE = {items: []};
 
+function reducer(state, action) {
+    if (action.type === 'add'){
+        return {items: [...action.data]};
+    }
+    if (action.type === 'remove-item') {
+        for (const item in state.items)
+            if (action.data.id === item.id)
+                state.items.push(item);
+        return state;
+    }
+    return state;
+}
+
+const ItemHeader = () => <AdminPanelHeader title="Items" link="/admin/item/add" button="Add Item" />;
+
 const ItemItem = ({data}) => {
     const navigate = useNavigate();
-    const remove = false;
+    const Update = () => { navigate('./' + data.id) }
+    const Delete = () => { ItemHandler2.delete(data.id) }
     
-    const Update = () => {
-        navigate('./' + data.id);
-    }
-
-    const Delete = useCallback( async () => {
-        await ItemHandler.delete(data.id);
-    }, []);
-
-    useEffect(() => {
-        if (remove) {
-            for (const item in STATE.items)
-                if (item.id == data.id)
-                    STATE.items.push(item);
-        }
-    }, []);
-
     return (
         <tr>
             <td>{ data.id }</td>
@@ -45,38 +46,32 @@ const ItemItem = ({data}) => {
     )
 }
 
-const ItemList = ({items}) => {
-    if (Array.isArray(items)) {
-        const listOfItems = items.map(item => <ItemItem key={item.id} data={item} />);
-        return listOfItems;
-    }
+const ItemList = () => {
+    const [state, dispatch] = useReducer(reducer, STATE);
+
+    const getItemsData = useCallback(() => {
+        ItemHandler2.get()
+            .then(response => response.json())
+            .then(result => { dispatch({type: 'add', data: result.results}) })
+    }, [state]) // eslint-disable-next-line
+
+    useEffect(() => { getItemsData() }, [getItemsData])
+    
+    return (
+        <>
+            {
+                state.items.map(item => <ItemItem key={item.id} data={item} />)
+            }
+        </>
+    )
 }
 
 const ItemListView = () => {
-    const [state, setState] = useState(STATE);
- 
-    const get_items = async () => {
-        try {
-            const data = await ItemHandler.get();
-            const result = await data.json();
-            console.log(result)
-            setState(result.results);
-        }
-        catch (error) {
-            console.log('Item error: ' + error);
-        }
-    }
-
-    useEffect(() => {
-        get_items();
-        STATE.items = state;
-    })
-
     return (
         <Layout content={
             <>
-                <h1>Items</h1>
-                <Table striped bordered hover className="mt-5">
+                <ItemHeader />
+                <Table striped bordered hover>
                     <thead>
                         <tr>
                             <th>#</th>
@@ -90,9 +85,72 @@ const ItemListView = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <ItemList items={ STATE.items } />
+                        <ItemList />
                     </tbody>
                 </Table>
+            </>
+        } />
+    )
+}
+
+export const ItemAddView = () => {
+    const [state, setState] = useState({visibility: false});
+
+    const changeVisibility = () => {
+        setState({...state, visibility: !state.visibility});
+    }
+
+    const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
+    
+    const handleSubmit = async event => {
+        event.preventDefault();
+        state.category = parseInt(state.category);
+        console.log(state);
+        ItemHandler2.post(state)
+            .then(response => {
+                if (response.status === 200) return response.json();
+                if (response.status === 400) throw new Error("There is no category with this id.");
+            })
+            .then(data => { console.log(data) })
+            .catch(error => { alert(error) });
+    }
+
+    return (
+        <Layout content={
+            <>
+                <ItemHeader />
+                <Form onSubmit={ handleSubmit }>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Control
+                            type="number" maxLength="10" name="category" placeholder="Category ID"
+                            onChange={ handleInputChange } 
+                        />
+                        <br />
+                        <Form.Control
+                            name="title" placeholder="Item Title"
+                            onChange={ handleInputChange } 
+                        />
+                        <br />
+                        <Form.Check 
+                            type="switch"
+                            id="custom-switch"
+                            label="Visibility"
+                            checked={ state.visibility }
+                            onChange={ changeVisibility }
+                        />
+                        <br />
+                        <Form.Control
+                            type="number" name="quantity" placeholder="Item Quantity"
+                            onChange={ handleInputChange } 
+                        />
+                        <br />
+                        <Form.Control
+                            type="number" name="unit_price" placeholder="Category Unit Price"
+                            onChange={ handleInputChange } 
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">Update</Button>
+                </Form>
             </>
         } />
     )
@@ -102,75 +160,65 @@ export const ItemDetailView = () => {
     const [state, setState] = useState({});
     const { id } = useParams();
 
-    const getItemData = async () => {
-        try {
-            const data = await ItemHandler.get(id);
-            const result = await data.json();
-            setState(result);
-        }
-        catch (error) {
-            console.log('Item Detail error: ' + error);
-        }
-    }
+    const getItemData = useCallback(() => {
+        ItemHandler2.get(id)
+            .then(response => response.json())
+            .then(data => { setState(data) })
+    }, [id])
 
-    useEffect(() => { getItemData() }, [])
+    useEffect(() => { getItemData() }, [getItemData])
 
     const changeVisibility = () => {
-        state.visibility = !state.visibility;
+        setState({...state, visibility: !state.visibility});
     }
 
     const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
     
     const handleSubmit = async event => {
         event.preventDefault();
-        try {
-            state.category = parseInt(state.category);
-            let response = await ItemHandler.put(id, state);
-            let result = await response.json();
-            if (response.status == 400) {
-                getItemData();
-                alert("There is no category with this id.")
-            } else {
-                setState(result)
-            }
-        }
-        catch (error) {
-            console.log('AdminItemDetail Submit error: ' + error);
-        }
+        state.category = parseInt(state.category);
+        console.log(state);
+        ItemHandler2.put(id, state)
+            .then(response => {
+                if (response.status === 200) return response.json();
+                if (response.status === 400) throw new Error("There is no category with this id.");
+            })
+            .then(data => { setState(data) })
+            .catch(error => { alert(error); getItemData() });
     }
 
     return (
         <Layout content={
             <>
-                <h1>Items</h1>
+                <ItemHeader />
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Control
                             type="number" maxLength="10" name="category" placeholder="Category ID"
-                            value={ state.category } onChange={ handleInputChange } 
+                            value={ state.category || '' } onChange={ handleInputChange } 
                         />
                         <br />
                         <Form.Control
                             type="category" name="title" placeholder="Item Title"
-                            value={ state.title } onChange={ handleInputChange } 
+                            value={ state.title || '' } onChange={ handleInputChange } 
                         />
                         <br />
                         <Form.Check 
                             type="switch"
                             id="custom-switch"
                             label="Visibility"
-                            defaultChecked={ state.visibility }
-                            onChange={changeVisibility}
+                            checked={ state.visibility || false}
+                            onChange={ changeVisibility }
                         />
                         <br />
                         <Form.Control
                             type="category" name="quantity" placeholder="Item Quantity"
-                            value={ state.quantity } onChange={ handleInputChange } 
+                            value={ state.quantity || 0 } onChange={ handleInputChange } 
                         />
                         <br />
                         <Form.Control
                             type="category" name="unit_price" placeholder="Category Unit Price"
-                            value={ state.unit_price } onChange={ handleInputChange } 
+                            value={ state.unit_price || 0 } onChange={ handleInputChange } 
                         />
                     </Form.Group>
                     <Button variant="primary" type="submit">Update</Button>

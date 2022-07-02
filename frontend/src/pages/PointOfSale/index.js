@@ -1,9 +1,3 @@
-import React from 'react';
+import _PointOfSaleView from './PointOfSaleView';
 
-const PointOfSaleIndex = () => {
-    return (
-        <h1>Point Of Sale Page</h1>
-    )
-}
-
-export default PointOfSaleIndex;
+export const PointOfSaleIndex = _PointOfSaleView;
