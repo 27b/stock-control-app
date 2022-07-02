@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useReducer } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { ItemHandler2 } from '../../services/AdminAPI';   
 import Layout from './_layout';
@@ -7,28 +7,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { AdminPanelHeader } from '../../components/Header'
 
-const STATE = {items: []};
-
-function reducer(state, action) {
-    if (action.type === 'add'){
-        return {items: [...action.data]};
-    }
-    if (action.type === 'remove-item') {
-        for (const item in state.items)
-            if (action.data.id === item.id)
-                state.items.push(item);
-        return state;
-    }
-    return state;
-}
-
 const ItemHeader = () => <AdminPanelHeader title="Items" link="/admin/item/add" button="Add Item" />;
 
-const ItemItem = ({data}) => {
+const ItemItem = ({data, removeHandler}) => {
     const navigate = useNavigate();
     const Update = () => { navigate('./' + data.id) }
-    const Delete = () => { ItemHandler2.delete(data.id) }
-    
+
     return (
         <tr>
             <td>{ data.id }</td>
@@ -40,27 +24,32 @@ const ItemItem = ({data}) => {
             <td>{ data.last_modified }</td>
             <td>
                 <Button variant="primary" as="input" type="button" value="Update" onClick={Update} />{' '}
-                <Button variant="danger" as="input" type="button" value="Delete" onClick={Delete} />
+                <Button variant="danger" as="input" type="button" value="Delete" onClick={() => removeHandler(data.id)} />
             </td>
         </tr>
     )
 }
 
 const ItemList = () => {
-    const [state, dispatch] = useReducer(reducer, STATE);
-
+    const [state, setState] = useState([])
     const getItemsData = useCallback(() => {
         ItemHandler2.get()
             .then(response => response.json())
-            .then(result => { dispatch({type: 'add', data: result.results}) })
-    }, [state]) // eslint-disable-next-line
+            .then(result => { setState(result.results) })
+    }, [])
 
     useEffect(() => { getItemsData() }, [getItemsData])
     
+    const removeItemHandler = id => {
+        ItemHandler2.delete(id);
+        const stateUpdated = state.filter(item => item.id !== id);
+        setState(stateUpdated);
+    }
+     
     return (
         <>
             {
-                state.items.map(item => <ItemItem key={item.id} data={item} />)
+                state.map(item => <ItemItem key={item.id} data={item} removeHandler={removeItemHandler} />)
             }
         </>
     )
@@ -105,7 +94,6 @@ export const ItemAddView = () => {
     const handleSubmit = async event => {
         event.preventDefault();
         state.category = parseInt(state.category);
-        console.log(state);
         ItemHandler2.post(state)
             .then(response => {
                 if (response.status === 200) return response.json();
