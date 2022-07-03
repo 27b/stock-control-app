@@ -1,6 +1,8 @@
 import { SERVER_URL } from "../constants/urls";
+import { sendRequest } from "./http/requests"
 
 export const USER_DATA_URL = SERVER_URL + 'api/point-of-sale/user/';
+export const LOGIN_URL = SERVER_URL + 'api/point-of-sale/login/';
 
 export const loginUser = ({token, user}) => {
     localStorage.setItem('token', token);
@@ -18,3 +20,8 @@ export const checkUser = () => localStorage.getItem('username') && localStorage.
 export const authUser = () => checkToken() && checkUser();
 
 export const authAdminUser = () => authUser() && localStorage.getItem('role') === 'AD';
+
+export const checkUserCredentials = credentials => sendRequest('POST', LOGIN_URL, {
+    'username': String(credentials.username),
+    'password': String(credentials.password),
+});

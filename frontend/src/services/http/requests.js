@@ -1,29 +1,4 @@
-export const sendRequest = async (method, url, data=null) => {
-    let options = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    if (method !== 'get' && method !== 'GET')
-        options['body'] = JSON.stringify(data);
-    return await fetch (url, options);
-}
-
-export const sendAuthRequest = async (method, url, data=null) => {
-    let options = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Token ' + localStorage.getItem('token'),
-        },
-    }
-    if (method !== 'get' && method !== 'GET')
-        options['body'] = JSON.stringify(data);
-    return await fetch(url, options);
-}
-
-export const sendRequest2 = (method, url, data=null) => {
+export const sendRequest = (method, url, data=null) => {
     let options = {
         method: method,
         headers: {
@@ -35,7 +10,7 @@ export const sendRequest2 = (method, url, data=null) => {
     return fetch(url, options);
 }
 
-export const sendAuthRequest2 = (method, url, data=null) => {
+export const sendAuthRequest = (method, url, data=null) => {
     let options = {
         method: method,
         headers: {
@@ -45,5 +20,5 @@ export const sendAuthRequest2 = (method, url, data=null) => {
     }
     if (method !== 'get' && method !== 'GET')
         options['body'] = JSON.stringify(data);
-    return fetch(url, options)
+    return fetch(url, options);
 }
