@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
-import { loginUser } from '../../services/AuthAPI';
-import { checkUserCredentials } from '../../services/LoginAPI';
-
+import { loginUser, checkUserCredentials } from '../../services/AuthAPI';
 import './css/styles.css';
 
 const Login = () => {
     const initialState = {username: '', password: ''};
     const [state, setState] = useState(initialState);
     const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
-    const handleSubmit = async event => {
+    const handleSubmit = event => {
         event.preventDefault();
-        try {
-            let response = await checkUserCredentials(state);
-            let result = await response.json();
-            if (result.token) loginUser(result);
-        }
-        catch (error) {
-            console.log('Login error: ' + error);
-        }
+        checkUserCredentials(state)
+            .then(response => response.json())
+            .then(result => {
+                if (result.token) loginUser(result)
+                console.log(result.token);
+            })
         setState(initialState);
     }
 

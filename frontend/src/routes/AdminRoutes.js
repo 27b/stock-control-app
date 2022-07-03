@@ -7,7 +7,6 @@ import {
   CategoryListView,
   CategoryDetailView,
   ItemListView,
-  ItemAddView,
   ItemDetailView
 } from '../pages/Admin';
 
@@ -19,7 +18,6 @@ export default function AuthRoutes() {
          <Route path={PATH.ADMIN.CATEGORY} element={<CategoryListView />} />
          <Route path={PATH.ADMIN.CATEGORY + '/:id'} element={<CategoryDetailView />} />
          <Route path={PATH.ADMIN.ITEM} element={<ItemListView />} />
-         <Route path={PATH.ADMIN.ITEM + '/add'} element={<ItemAddView />} />
          <Route path={PATH.ADMIN.ITEM + '/:id'} element={<ItemDetailView />} />
         </Route>
       </Routes>
