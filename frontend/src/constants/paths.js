@@ -8,6 +8,7 @@ export const PATH = {
     },
     ADMIN: {
         INDEX: '/admin',
+        USER: '/admin/user',
         CATEGORY: '/admin/category',
         ITEM: '/admin/item',
         TRANSACTION: '/admin/transaction',

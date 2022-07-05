@@ -4,6 +4,8 @@ import { PATH } from "../constants/paths"
 import AdminGuard from "../guards/AdminGuard";
 import { 
   DashboardView,
+  UserListView,
+  UserDetailView,
   CategoryListView,
   CategoryDetailView,
   ItemListView,
@@ -15,6 +17,8 @@ export default function AuthRoutes() {
       <Routes>
         <Route element={<AdminGuard />}>
          <Route path={PATH.ADMIN.INDEX} element={<DashboardView />} />
+         <Route path={PATH.ADMIN.USER} element={<UserListView />} />
+         <Route path={PATH.ADMIN.USER + '/:id'} element={<UserDetailView />} />
          <Route path={PATH.ADMIN.CATEGORY} element={<CategoryListView />} />
          <Route path={PATH.ADMIN.CATEGORY + '/:id'} element={<CategoryDetailView />} />
          <Route path={PATH.ADMIN.ITEM} element={<ItemListView />} />

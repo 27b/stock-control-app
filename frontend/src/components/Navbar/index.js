@@ -13,7 +13,7 @@ const NavbarComponent = () => {
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
                     <Dropdown>
-                        <Dropdown.Toggle className="text-capitalize" variant="outline-secondary" id="dropdown-basic">
+                        <Dropdown.Toggle className="text-capitalize" variant="outline-success" id="dropdown-basic">
                             { username }
                         </Dropdown.Toggle>
                         <Dropdown.Menu align={{ lg: 'end' }}>
