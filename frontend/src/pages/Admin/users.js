@@ -36,10 +36,12 @@ const UserList = () => {
         setState(JSON.parse(localStorage.getItem('UserList')));
         UserHandler.get()
             .then(response => response.json())
+            .then(data => data.results)
             .then(result => {
                 setState(result);
                 localStorage.setItem('UserList', JSON.stringify(result));
-            });
+            })
+            .catch(error => alert(error))
     }, []);
 
     useEffect(() => { getUserData() }, [getUserData])
@@ -48,6 +50,7 @@ const UserList = () => {
         UserHandler.delete(id);
         const stateUpdated = state.filter(user => user.id !== id);
         setState(stateUpdated);
+        localStorage.setItem('UserList', JSON.stringify(stateUpdated));
     }
 
     return (
@@ -91,7 +94,8 @@ export const UserDetailView = () => {
     const getUserData = useCallback(() => {
         UserHandler.get(id)
             .then(response => response.json())
-            .then(result => { setState(result) });
+            .then(result => { setState(result) })
+            .catch(error => alert(error))
     }, [id]);
 
     useEffect(() => {
@@ -105,11 +109,13 @@ export const UserDetailView = () => {
         if (id === 'add') {
             UserHandler.post(state)
                 .then(response => response.json())
-                .then(data => { navigate('/admin/user/' + data.id) });
+                .then(data => { navigate('/admin/user/' + data.id) })
+                .catch(error => alert(error))
         } else {
             UserHandler.put(id, state)
                 .then(response => response.json())
-                .then(data => { setState(data) });
+                .then(data => { setState(data) })
+                .catch(error => alert(error));
         }
     }
 
