@@ -1,5 +1,6 @@
 export const PATH = {
     LOGIN: '/',
+    LOGOUT: '/logout',
     USER: {
         INDEX: '/dashboard',
         CATEGORY: '/user/category',
