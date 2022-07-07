@@ -32,7 +32,8 @@ const CategoryList = () => {
     const [state, setState] = useState([]);
 
     const getCategoriesData = useCallback(() => {
-        setState(JSON.parse(localStorage.getItem('CategoryList')))
+        if (localStorage.getItem('CategoryList'))
+            setState(JSON.parse(localStorage.getItem('CategoryList')))
         CategoryHandler.get()
             .then(response => response.json())
             .then(result => {

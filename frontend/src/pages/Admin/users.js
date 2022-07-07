@@ -33,7 +33,8 @@ const UserList = () => {
     const [state, setState] = useState([]);
 
     const getUserData = useCallback(() => {
-        setState(JSON.parse(localStorage.getItem('UserList')));
+        if (localStorage.getItem('UserList'))
+            setState(JSON.parse(localStorage.getItem('UserList')));
         UserHandler.get()
             .then(response => response.json())
             .then(data => data.results)

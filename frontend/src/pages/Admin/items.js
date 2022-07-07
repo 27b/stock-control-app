@@ -35,7 +35,8 @@ const ItemList = () => {
     const [state, setState] = useState([]);
 
     const getItemsData = useCallback(() => {
-        setState(JSON.parse(localStorage.getItem('ItemList')));
+        if (localStorage.getItem('ItemList'))
+            setState(JSON.parse(localStorage.getItem('ItemList')));
         ItemHandler.get()
             .then(response => response.json())
             .then(result => {
