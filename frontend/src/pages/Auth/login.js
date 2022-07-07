@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { loginUser, checkUserCredentials } from '../../services/AuthAPI';
 import './css/styles.css';
 
 const Login = () => {
+    const navigate = useNavigate()
     const initialState = {username: '', password: ''};
     const [state, setState] = useState(initialState);
     const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
@@ -11,8 +13,14 @@ const Login = () => {
         checkUserCredentials(state)
             .then(response => response.json())
             .then(result => {
-                if (result.token) loginUser(result)
-                console.log(result.token);
+                if (result.token) {
+                    loginUser(result);
+                    if (result.user.role === 'AD') navigate('/admin');
+                    else navigate('/dashboard');
+                }
+                else {
+                    alert(result.error);
+                }
             })
         setState(initialState);
     }
