@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
@@ -39,30 +38,16 @@ class LoginView(ObtainAuthToken):
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserDetailView(RetrieveAPIView):
+class UserView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = [IsUserPermission]
-    http_method_names = ["get"]
-
-    def get(self, request, pk=None):
-        queryset = CustomUser.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        self.check_object_permissions(request, user)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-
- 
-class UserListView(ListCreateAPIView):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = [AdminGetPermission]
-    serializer_class = UserSerializer
-    http_method_names = ["get"]
+    permission_classes = [
+        AdminGetPermission | AdminPostPermission |
+        AdminPutPermission | AdminDeletePermission |
+        IsUserSecureMethodsPermission
+    ]
     queryset = CustomUser.objects.all()
-
-    def list(self, request):
-        queryset = self.get_queryset()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
+    serializer_class = UserSerializer
+    http_method_names = ["get", "post", "put", "delete"]
 
 
 class CategoryView(viewsets.ModelViewSet):

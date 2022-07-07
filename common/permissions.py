@@ -22,6 +22,17 @@ class IsUserPermission(BasePermission):
         return request.user == obj
 
 
+class IsUserSecureMethodsPermission(BasePermission):
+    """
+    Check if the profile is of the user and the method is GET.
+    """
+    def has_permission(self, request, view) -> bool:      
+        return request.method == "GET"
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj
+
+
 class PointOfSaleGetPermission(BasePermission):
     """
     Check if the user have the rol of Point of Sale and the method is GET.
