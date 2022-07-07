@@ -50,6 +50,7 @@ const ItemList = () => {
         ItemHandler.delete(id);
         const stateUpdated = state.filter(item => item.id !== id);
         setState(stateUpdated);
+        localStorage.setItem('ItemList', JSON.stringify(stateUpdated));
     }
      
     return (

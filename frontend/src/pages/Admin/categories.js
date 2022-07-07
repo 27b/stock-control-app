@@ -38,7 +38,7 @@ const CategoryList = () => {
             .then(result => {
                 setState(result.results);
                 localStorage.setItem('CategoryList', JSON.stringify(result.results));
-            });
+            })
     }, []);
 
     useEffect(() => { getCategoriesData() }, [getCategoriesData])
@@ -47,6 +47,7 @@ const CategoryList = () => {
         CategoryHandler.delete(id);
         const stateUpdated = state.filter(category => category.id !== id);
         setState(stateUpdated);
+        localStorage.setItem('CategoryList', JSON.stringify(stateUpdated));
     }
 
     return (
