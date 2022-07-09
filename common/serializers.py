@@ -8,13 +8,35 @@ class UserSerializer(serializers.ModelSerializer):
     Returns:
         dict: with id, role
     """
+    password = serializers.CharField(write_only=True, required=False, min_length=8)
+
+    def create(self, validated_data):
+        new_user = CustomUser.objects.create(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            role=validated_data['role'],
+            first_name='',
+            last_name=''
+        )
+        new_user.set_password(validated_data['password'])
+        new_user.save()
+        return new_user
+    
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username')
+        instance.email = validated_data.get('email')
+        instance.role = validated_data.get('role')
+        instance.save()
+        return instance
+
     class Meta:
         model = CustomUser
         fields = [
             "id",
             "role",
             "username",
-            "email"
+            "email",
+            "password"
         ]
 
 

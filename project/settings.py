@@ -74,6 +74,7 @@ THIRD_APPS = [
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
 
 CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:3000',
     'http://localhost:3000',
 ]
 
