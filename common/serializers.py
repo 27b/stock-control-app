@@ -91,6 +91,7 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transaction
         fields = [
+            "id",
             "price",
             "items",
             "datetime"
