@@ -7,9 +7,8 @@ from .user import CustomUserManager
 
 class CustomUser(AbstractUser):
     ROLES = [
-        ("PS", "Point of Sale"),
-        ("IM", "Inventory Management"),
         ("AD", "Administration"),
+        ("PS", "Point of Sale")
     ]
 
     role = models.CharField(max_length=2, choices=ROLES, null=True, blank=True)
