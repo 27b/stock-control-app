@@ -1,5 +1,3 @@
-from django.shortcuts import get_object_or_404
-
 from rest_framework import viewsets, status
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
@@ -14,36 +12,23 @@ from common.permissions import *
 class LoginView(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
-        login_serializer = self.serializer_class(
-            data = request.data,
-            context = {'request': request}
-        )
-        if login_serializer.is_valid():
-            user = login_serializer.validated_data['user']
-            user_serialized = UserSerializer(user).data
-            if user.is_active:
-                token, created = Token.objects.get_or_create(user=user)
-                if created:
-                    token.delete()
-                    token = Token.objects.create(user=user)
-                return Response({
-                    'token': token.key,
-                    'user': user_serialized
-                }, status=status.HTTP_201_CREATED)
-            return Response({
-                'error': 'User don\'t start session.'
-            }, status=status.HTTP_401_UNAUTHORIZED)
-        return Response({
-            'error': 'Wrong username or password.'
-        }, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        user_data = {
+            'username': user.username,
+            'role': user.role, 
+            'email': user.email
+        }
+        return Response({'token': token.key, 'user': user_data})
 
 
 class UserView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [
         AdminGetPermission | AdminPostPermission |
-        AdminPutPermission | AdminDeletePermission |
-        IsUserSecureMethodsPermission
+        AdminPutPermission | AdminDeletePermission
     ]
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
