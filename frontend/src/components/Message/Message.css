@@ -1,0 +1,16 @@
+.message-container {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+.message {
+    width: 80%;
+    padding: 15px 15px 20px 15px;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+}
