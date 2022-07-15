@@ -1,18 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useState, useEffect, useCallback } from 'react';
-import { UserHandler } from '../../services/AdminAPI';
-import Layout from './_layout';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Layout from './_layout';
+import { UserHandler } from '../../services/AdminAPI';
 import { AdminPanelHeader } from '../../components/Header';
-
+import { Message } from '../../components/Message';
 
 const UserHeader = () => <AdminPanelHeader title="Users" link="/admin/user/add" button="New User" />;
 
 const UserItem = ({data, removeHandler}) => {
     const navigate = useNavigate();
-
     const Update = () => { navigate('./' + data.id) }
 
     return (
@@ -31,6 +30,7 @@ const UserItem = ({data, removeHandler}) => {
 
 const UserList = () => {
     const [state, setState] = useState([]);
+    const [error, setError] = useState({status: false, message: ''});
 
     const getUserData = useCallback(() => {
         if (localStorage.getItem('UserList'))
@@ -40,12 +40,17 @@ const UserList = () => {
             .then(data => data.results)
             .then(result => {
                 setState(result);
+                setError({status: false, message: ''});
                 localStorage.setItem('UserList', JSON.stringify(result));
             })
-            .catch(error => alert(error))
+            .catch(err => {
+                console.error(err);
+                setError({status: true, message: err});
+                getUserData();
+            })
     }, []);
 
-    useEffect(() => { getUserData() }, [getUserData])
+    useEffect(() => { getUserData() }, [getUserData]);
     
     const removeUserHandler = id => {
         UserHandler.delete(id);
@@ -59,6 +64,7 @@ const UserList = () => {
             {
                 state.map(user => <UserItem key={user.id} data={user} removeHandler={removeUserHandler} />)
             }
+            <Message status={ error.status } color='bg-warning' message='Server connection error' />
         </>
     )
 }
@@ -89,19 +95,23 @@ const UserListView = () => {
 
 export const UserDetailView = () => {
     const navigate = useNavigate();
+    const InitialState = {status: false, color: '', message: ''}
     const [state, setState] = useState({});
+    const [error, setError] = useState(InitialState);
     const { id } = useParams();
 
     const getUserData = useCallback(() => {
         UserHandler.get(id)
             .then(response => response.json())
-            .then(result => { setState(result) })
-            .catch(error => alert(error))
+            .then(result => { setState(result); setError(InitialState) })
+            .catch(err => {
+                console.error(err);
+                setError({status: true, color: 'bg-warning', message: 'Failed to get resource'});
+                getUserData();
+            })
     }, [id]);
 
-    useEffect(() => {
-        if (id !== 'add') getUserData(); else setState({});
-    }, [getUserData, id]);
+    useEffect(() => { if (id !== 'add') getUserData(); else setState({}) }, [getUserData, id]);
 
     const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
     
@@ -111,12 +121,12 @@ export const UserDetailView = () => {
             UserHandler.post(state)
                 .then(response => response.json())
                 .then(data => { navigate('/admin/user/' + data.id) })
-                .catch(error => alert(error))
+                .catch(() => { setError({status: true, color: 'bg-danger', message: 'Error saving resource'}) })
         } else {
             UserHandler.put(id, state)
                 .then(response => response.json())
                 .then(data => { setState(data) })
-                .catch(error => alert(error));
+                .catch(() => { setError({status: true, color: 'bg-danger', message: 'Error saving resource'}) });
         }
     }
 
@@ -155,6 +165,7 @@ export const UserDetailView = () => {
                     </Form.Group>
                     <Button variant="primary" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
                 </Form>
+                <Message status={ error.status } color={ error.color } message={ error.message } />
             </>
         } />
     )
