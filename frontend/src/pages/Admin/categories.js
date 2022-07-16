@@ -65,13 +65,13 @@ const CategoryListView = () => {
         <Layout content={
             <>
                 <CategoryHeader />
-                <Table striped bordered hover>
+                <Table hover>
                     <thead>
                         <tr>
-                        <th>#</th>
-                        <th>Category Name</th>
-                        <th>Items</th>
-                        <th>Actions</th>
+                            <th>#</th>
+                            <th>Category Name</th>
+                            <th>Items</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -124,7 +124,7 @@ export const CategoryDetailView = () => {
                             value={ state.title || ''} onChange={ handleInputChange } 
                         />
                     </Form.Group>
-                    <Button variant="primary" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
+                    <Button variant="success" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
                 </Form>
             </>
         } />

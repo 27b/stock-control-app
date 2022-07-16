@@ -74,7 +74,7 @@ const UserListView = () => {
         <Layout content={
             <>
                 <UserHeader />
-                <Table striped bordered hover>
+                <Table hover>
                     <thead>
                         <tr>
                             <th>#</th>
@@ -163,7 +163,7 @@ export const UserDetailView = () => {
                             : ''
                         }
                     </Form.Group>
-                    <Button variant="primary" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
+                    <Button variant="success" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
                 </Form>
                 <Message status={ error.status } color={ error.color } message={ error.message } />
             </>

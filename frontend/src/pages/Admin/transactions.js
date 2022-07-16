@@ -66,7 +66,7 @@ const TransactionListView = () => {
         <Layout content={
             <>
                 <TransactionHeader />
-                <Table striped bordered hover>
+                <Table hover>
                     <thead>
                         <tr>
                             <th>#</th>
@@ -125,7 +125,7 @@ export const TransactionDetailView = () => {
                             value={ state.title || ''} onChange={ handleInputChange } 
                         />
                     </Form.Group>
-                    <Button variant="primary" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
+                    <Button variant="success" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
                 </Form>
             </>
         } />
