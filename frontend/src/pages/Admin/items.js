@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { ItemHandler } from '../../services/AdminAPI';   
-import Layout from './_layout';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { AdminPanelHeader } from '../../components/Header'
-
+import Layout from './_layout';
+import { AdminPanelHeader } from '../../components/Header';
+import { Message } from '../../components/Message';
 
 const ItemHeader = () => <AdminPanelHeader title="Items" link="/admin/item/add" button="New Item" />;
 
@@ -33,6 +33,7 @@ const ItemItem = ({data, removeHandler}) => {
 
 const ItemList = () => {
     const [state, setState] = useState([]);
+    const [error, setError] = useState({status: false, message: ''})
 
     const getItemsData = useCallback(() => {
         if (localStorage.getItem('ItemList'))
@@ -41,7 +42,13 @@ const ItemList = () => {
             .then(response => response.json())
             .then(result => {
                 setState(result.results);
+                setError({status: false, message: ''})
                 localStorage.setItem('ItemList', JSON.stringify(result.results));
+            })
+            .catch(err => {
+                console.error(err)
+                setError({status: true, message: 'Server connection error'})
+                getItemsData()
             })
     }, [])
 
@@ -59,6 +66,7 @@ const ItemList = () => {
             {
                 state.map(item => <ItemItem key={item.id} data={item} removeHandler={removeItemHandler} />)
             }
+            <Message status={ error.status } color='bg-warning' message={ error.message } />
         </>
     )
 }
@@ -68,7 +76,7 @@ const ItemListView = () => {
         <Layout content={
             <>
                 <ItemHeader />
-                <Table striped bordered hover>
+                <Table hover>
                     <thead>
                         <tr>
                             <th>#</th>
@@ -92,22 +100,25 @@ const ItemListView = () => {
 
 export const ItemDetailView = () => {
     const navigate = useNavigate();
+    const initialState = {status: false, color: '', message: ''}
     const [state, setState] = useState({});
+    const [error, setError] = useState(initialState);
     const { id } = useParams();
 
     const getItemData = useCallback(() => {
         ItemHandler.get(id)
             .then(response => response.json())
-            .then(data => { setState(data) });
+            .then(data => { setState(data); setError({status: false, color: '', message: ''}) })
+            .catch(err => {
+                console.error(err);
+                setError({status: true, color: 'bg-warning', message: 'Failed to get resource'});
+                getItemData();
+            })
     }, [id])
 
-    useEffect(() => {
-        if (id !== 'add') getItemData(); else setState({});
-    }, [getItemData, id])
+    useEffect(() => { if (id !== 'add') getItemData(); else setState({}) }, [getItemData, id])
 
-    const changeVisibility = () => {
-        setState({...state, visibility: !state.visibility});
-    }
+    const changeVisibility = () => { setState({...state, visibility: !state.visibility}) }
 
     const handleInputChange = e => setState({...state, [e.target.name]: e.target.value});
     
@@ -121,15 +132,24 @@ export const ItemDetailView = () => {
                     else return response.json();
                 })
                 .then(data => { navigate('/admin/item/' + data.id) })
-                .catch(error => { alert(error) });
+                .catch(err => {
+                    const customError = err.message === 'There is no category with this id.' ? true : false;
+                    const message = customError ? err.message : 'Error saving resource';
+                    setError({status: true, color: 'bg-danger', message});
+                });
         } else {
             ItemHandler.put(id, state)
                 .then(response => {
-                    if (response.status === 400) throw new Error("There is no category with this id.");
+                    if (response.status === 400)
+                        throw new Error("There is no category with this id.");
                     else return response.json()
                 })
                 .then(data => { setState(data) })
-                .catch(error => { alert(error); getItemData() });
+                .catch(err => {
+                    const customError = err.message === 'There is no category with this id.' ? true : false;
+                    const message = customError ? err.message : 'Error saving resource';
+                    setError({status: true, color: 'bg-danger', message});
+                });
         }
     }
 
@@ -149,8 +169,9 @@ export const ItemDetailView = () => {
                         <br />
                         <Form.Control type="number" name="unit_price" placeholder="Category Unit Price" value={ state.unit_price || '' } onChange={ handleInputChange } />
                     </Form.Group>
-                    <Button variant="primary" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
+                    <Button variant="success" type="submit">{ id === 'add' ? 'Save' : 'Update'}</Button>
                 </Form>
+                <Message status={ error.status } color={ error.color } message={ error.message } />
             </>
         } />
     )
