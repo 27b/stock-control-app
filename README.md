@@ -10,6 +10,9 @@
 - react 18.1.0
 - react-router-dom 6.3.0
 
+## TODO
+- Complete the frontend of POS
+
 ## Instructions
 `virtualenv env`
 
